@@ -131,13 +131,22 @@
             }
         
             function runQuery() {
+                console.log("Release:",iterationDropdown.getSelectedName(), iterationDropdown.getSelectedName()==="");
                 dojo.empty(dojo.byId("cards"));
                 var queryArray = [];
                 
                 var query = "";
                 
 				//Print features instead of stories.
-                query = "(PortfolioItemType.Ordinal = 0)";
+                // query = "(PortfolioItemType.Ordinal = 0)";
+
+                var selectedRelease = iterationDropdown.getSelectedName();
+                query = "((PortfolioItemType.Ordinal = 0) and " +
+                    ( selectedRelease === "" ? "(Release = null)" 
+                            : "(Release.Name = " + "\"" + selectedRelease + "\")" ) +
+                    ")";
+                console.log("query",query);
+
         
                 queryArray[0] = {
                     key: CARD_TYPE,
@@ -151,7 +160,7 @@
                     type: 'users',
                     fetch: 'UserName,ObjectID,DisplayName'
                 };
-                rallyDataSource.setApiVersion("1.40");
+                rallyDataSource.setApiVersion("1.43");
                 rallyDataSource.findAll(queryArray, displayCards);
             }
         
@@ -197,7 +206,8 @@
 			}
         
             this.display = function(){
-                iterationDropdown = new rally.sdk.ui.IterationDropdown({}, rallyDataSource);
+                // iterationDropdown = new rally.sdk.ui.IterationDropdown({}, rallyDataSource);
+                iterationDropdown = new rally.sdk.ui.ReleaseDropdown({}, rallyDataSource);
                 iterationDropdown.addEventListener("onDataRetrieved",    onDataRetrieved);
                 iterationDropdown.display("iterationDropdown", runQuery);
         
@@ -337,12 +347,14 @@
 </head>
 <body>
     <div style="float:right" id="help"></div>
+            <div id="iterationDropdown"></div>
+
     <div id="interface">
         <div id="buttonDiv"></div>
     </div>
     <div id="printSection">
         <div id="cards"></div>
-        <div id="iterationDropdown">IGNORE THIS DROPDOWN/UNUSED:<P></div>
+        <!-- <div id="iterationDropdown">IGNORE THIS DROPDOWN/UNUSED:<P></div> -->
     </div>
 </body>
 </html>
