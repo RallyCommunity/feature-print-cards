@@ -62,7 +62,8 @@
                         estimate = "None";
                     }
         
-                    description = data[i].Description.slice(0,240);
+                    // description = data[i].Description.slice(0,240);
+                    description = data[i].Description.slice(0,1024);
         
                     theMarkup = createMarkup(i, data.length, name, ownerText, ownerClass, description,
                             storyId, taskId, estimate);
@@ -347,7 +348,7 @@
 </head>
 <body>
     <div style="float:right" id="help"></div>
-            <div id="iterationDropdown"></div>
+    <div id="iterationDropdown"></div>
 
     <div id="interface">
         <div id="buttonDiv"></div>
